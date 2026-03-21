@@ -1,43 +1,42 @@
 import FormCard from "../../components/addComponent/FormCard";
 import InputField from "../../components/addComponent/InputField";
-import SelectField from "../../components/addComponent/SelectField";
-import FileField from "../../components/addComponent/FileField";
+import TextAreaField from "../../components/addComponent/TextAreaField";
 import FormButtons from "../../components/addComponent/FormButtons";
 import HomeLayout from "../../layouts/HomeLayout";
 
 export default function AddCategoryPage() {
 
-    const categories = [
-        "Beauty",
-        "Grocery",
-        "Food",
-        "Furniture",
-        "Shoes",
-        "Frames",
-        "Jewellery"
-    ];
-
     return (
-        <HomeLayout>   
-            <FormCard title="Add Category">
-                <form action="page-list-category.html" data-toggle="validator">
+
+        <HomeLayout>
+
+            <FormCard title="Thêm danh mục">
+
+                <form>
 
                     <div className="row">
 
-                    <FileField label="Image" />
+                        <InputField
+                            label="Tên danh mục *"
+                            placeholder="Nhập tên danh mục"
+                            required={true}
+                        />
 
-                    <InputField label="Product Name *" placeholder="Enter Product Name" required={true}/>
-
-                    <SelectField label="Category *" options={categories} />
-
-                    <InputField label="Code *" placeholder="Enter Code" required={true}/>
+                        <TextAreaField
+                            label="Mô tả"
+                            placeholder="Nhập mô tả danh mục"
+                        />
 
                     </div>
 
-                    <FormButtons submitText="Add Category" />
+                    <FormButtons submitText="Thêm danh mục" />
 
                 </form>
+
             </FormCard>
+
         </HomeLayout>
+
     );
+
 }

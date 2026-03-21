@@ -240,6 +240,7 @@ textarea {
 button,
 input {
   overflow: visible; }
+  
 
 button,
 select {
@@ -20205,3 +20206,11 @@ i {
     border: 0 !important; }
   .card-item-right .style-text {
     margin-left: 10px; } }
+  
+  .table input{
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    text-align: center;
+  }

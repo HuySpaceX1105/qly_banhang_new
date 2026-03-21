@@ -1,9 +1,9 @@
 import React from "react";
 
-function SidebarCollapseItem({ id, title, icon, children }) {
+function SidebarCollapseItem({ id, title, icon, children , active = false, dataParent = "#iq-sidebar-toggle"}) {
   return (
-    <li className=" ">
-      <a href={`#${id}`} className="collapsed" data-toggle="collapse" aria-expanded="false">
+    <li className={active ? "active" : ""}>
+      <a href={`#${id}`} className="collapsed" data-toggle="collapse" aria-expanded={active ? "true" : "false"}>
         {icon}
 
         <span className="ml-4">{title}</span>
@@ -14,7 +14,7 @@ function SidebarCollapseItem({ id, title, icon, children }) {
         </svg>
       </a>
 
-      <ul id={id} className="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
+      <ul id={id} className={`iq-submenu collapse ${active ? "show" : ""}`} data-parent={dataParent}>
         {children}
       </ul>
     </li>

@@ -8,39 +8,93 @@ import HomeLayout from "../../layouts/HomeLayout";
 
 export default function AddProductPage() {
 
-    const productTypes = ["Standard", "Combo", "Digital", "Service"];
+    const categories = [
+        "Beauty",
+        "Grocery",
+        "Food",
+        "Furniture",
+        "Shoes",
+        "Frames",
+        "Jewellery"
+    ];
 
-    const categories = ["Beauty", "Grocery", "Food", "Furniture", "Shoes", "Frames", "Jewellery"];
+    const units = [
+        "Cái",
+        "Hộp",
+        "Kg",
+        "Chai",
+        "Gói"
+    ];
+
+    const status = [
+        "Đang bán",
+        "Ngừng bán"
+    ];
 
     return (
+
         <HomeLayout>
-            <FormCard title="Add Product">
 
-            <form>
+            <FormCard title="Thêm sản phẩm">
 
-                <div className="row">
+                <form>
 
-                <SelectField label="Product Type *" options={productTypes} />
-                <InputField label="Name *" placeholder="Enter Name" required col="col-md-6"/>
-                <InputField label="Code *"  placeholder="Enter Code" required col="col-md-6"/>
+                    <div className="row">
 
-                <SelectField label="Category *" options={categories} col="col-md-6"/>
+                        <InputField
+                            label="SKU *"
+                            placeholder="Nhập mã sản phẩm"
+                            required
+                            col="col-md-6"
+                        />
 
-                <InputField label="Cost *" placeholder="Enter Cost" col="col-md-6"/>
-                <InputField label="Price *" placeholder="Enter Price" col="col-md-6"/>
-                <InputField label="Quantity *" placeholder="Enter Quantity"/>
+                        <InputField
+                            label="Tên sản phẩm *"
+                            placeholder="Nhập tên sản phẩm"
+                            required
+                            col="col-md-6"
+                        />
 
-                <FileField label="Image" />
+                        <SelectField
+                            label="Loại sản phẩm *"
+                            options={categories}
+                            col="col-md-6"
+                        />
 
-                <TextAreaField label="Description / Product Details" />
+                        <SelectField
+                            label="Đơn vị *"
+                            options={units}
+                            col="col-md-6"
+                        />
 
-                </div>
+                        <InputField
+                            label="Giá bán"
+                            placeholder="Nhập giá bán"
+                            col="col-md-6"
+                        />
 
-                <FormButtons submitText="Add Product" />
+                        <SelectField
+                            label="Trạng thái"
+                            options={status}
+                            col="col-md-6"
+                        />
 
-            </form>
+                        <FileField label="Ảnh sản phẩm" />
+
+                        <TextAreaField
+                            label="Mô tả sản phẩm"
+                            placeholder="Nhập mô tả sản phẩm"
+                        />
+
+                    </div>
+
+                    <FormButtons submitText="Thêm sản phẩm" />
+
+                </form>
 
             </FormCard>
+
         </HomeLayout>
+
     );
 }

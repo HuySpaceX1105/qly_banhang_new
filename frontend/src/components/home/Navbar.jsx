@@ -6,8 +6,8 @@ function Navbar() {
 
                     <div className="iq-navbar-logo d-flex align-items-center justify-content-between">
                         <i className="ri-menu-line wrapper-menu"></i>
-                        <a href="../backend/index.html" className="header-logo">
-                            <img src="../assets/images/logo.png" className="img-fluid rounded-normal" alt="logo"/>
+                        <a href="/" className="header-logo">
+                            <img src="/assets/images/logo.png" className="img-fluid rounded-normal" alt="logo"/>
                             <h5 className="logo-title ml-3">POSDash</h5>
         
                         </a>
@@ -31,22 +31,22 @@ function Navbar() {
                                 <li className="nav-item nav-icon dropdown caption-content">
                                     <a href="#" className="search-toggle dropdown-toggle" id="dropdownMenuButton2"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <img src="../assets/images/user/1.png" className="img-fluid rounded" alt="user"/>
+                                        <img src="/assets/images/user/1.png" className="img-fluid rounded" alt="user"/>
                                     </a>
                                     <div className="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <div className="card shadow-none m-0">
                                             <div className="card-body p-0 text-center">
                                                 <div className="media-body profile-detail text-center">
-                                                    <img src="../assets/images/page-img/profile-bg.jpg" alt="profile-bg"
+                                                    <img src="/assets/images/page-img/profile-bg.jpg" alt="profile-bg"
                                                         className="rounded-top img-fluid mb-4"/>
-                                                    <img src="../assets/images/user/1.png" alt="profile-img"
+                                                    <img src="/assets/images/user/1.png" alt="profile-img"
                                                         className="rounded profile-img img-fluid avatar-70"/>
                                                 </div>
                                                 <div className="p-3">
                                                     <h5 className="mb-1">JoanDuo@property.com</h5>
                                                     <p className="mb-0">Since 10 march, 2020</p>
                                                     <div className="d-flex align-items-center justify-content-center mt-3">
-                                                        <a href="../app/user-profile.html" className="btn border mr-2">Profile</a>
+                                                        <a href="app/user-profile.html" className="btn border mr-2">Profile</a>
                                                         <a className="btn border">Sign Out</a>
                                                     </div>
                                                 </div>

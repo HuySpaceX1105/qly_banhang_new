@@ -2,6 +2,7 @@ import { Routes } from "react-router-dom";
 import AuthRoutes from "./AuthRoutes";
 import DashBoardRoutes from "./DashBoardRoutes";
 import AddRoutes from "./AddRoutes";
+import ListRoutes from "./ListRoutes";
 
 function AppRoutes() {
   return (
@@ -9,6 +10,7 @@ function AppRoutes() {
       {AuthRoutes()}
       {DashBoardRoutes()}
       {AddRoutes()}
+      {ListRoutes()}
     </Routes>
   );
 }
