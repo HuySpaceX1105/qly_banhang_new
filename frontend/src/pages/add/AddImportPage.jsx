@@ -6,10 +6,9 @@ import SelectField from "../../components/addComponent/SelectField";
 import TextAreaField from "../../components/addComponent/TextAreaField";
 import FormButtons from "../../components/addComponent/FormButtons";
 
-import EditableTable from "../../components/EditableTable/EditableTable";
-
 import HomeLayout from "../../layouts/HomeLayout";
-import TableHeader from "../../components/EditableTable/TableHeader";
+import EditableTable from "../../components/editlist/EditableTable";
+import ImportRow from "../../components/editlist/row/ImportRow";
 
 export default function AddImportPage() {
 
@@ -29,40 +28,29 @@ export default function AddImportPage() {
   ];
 
   const products = [
-    "Coca Cola",
-    "Pepsi",
-    "Bánh Oreo",
-    "Snack Lays"
+    { sku: "XML001", title: "Xi măng" },
+    { sku: "XML002", title: "Thép" },
+    { sku: "XML003", title: "Cát" }
   ];
 
   const importColumns = [
+    { key: "sku", title: "SKU" },
     { key: "product", title: "Sản phẩm" },
-    { key: "quantity", title: "Số lượng", className: "text-center" },
-    { key: "price", title: "Đơn giá", className: "text-end" },
+    { key: "quantity", title: "Số lượng" },
+    { key: "price", title: "Đơn giá" },
     { key: "mfg", title: "Ngày sản xuất" },
     { key: "exp", title: "Hạn sử dụng" },
-    { key: "amount", title: "Thành tiền", className: "text-end" },
-    { key: "action", title: "" }
+    { key: "amount", title: "Thành tiền" }
   ];
 
   /* ---------- STATE ---------- */
 
-  const [items, setItems] = useState([
-    {
-      product: "",
-      quantity: 1,
-      price: 0,
-      manufacture_date: "",
-      expiry_date: ""
-    }
-  ]);
+  const [items, setItems] = useState([{ product: "", quantity: 1, price: 0, manufacture_date: "", expiry_date: ""}]);
 
-  /* ---------- FUNCTIONS ---------- */
+  const [formData, setFormData] = useState({ date: "", supplier: "", status: "", note: "" });
 
   const addRow = () => {
-
-    setItems(prev => [
-      ...prev,
+    setItems(prev => [ ...prev,
       {
         product: "",
         quantity: 1,
@@ -71,29 +59,21 @@ export default function AddImportPage() {
         expiry_date: ""
       }
     ]);
-
   };
 
   const removeRow = (index) => {
-
     setItems(prev => prev.filter((_, i) => i !== index));
-
   };
 
   const updateItem = (index, field, value) => {
-
     setItems(prev => {
-
       const newItems = [...prev];
       newItems[index] = {
         ...newItems[index],
         [field]: value
       };
-
       return newItems;
-
     });
-
   };
 
   const total = items.reduce(
@@ -101,48 +81,65 @@ export default function AddImportPage() {
     0
   );
 
+  const resetForm = () => {
+    if (window.confirm("Bạn có chắc muốn reset?")) {
+      setItems([
+        {
+          product: "",
+          quantity: 1,
+          price: 0,
+          manufacture_date: "",
+          expiry_date: ""
+        }
+      ]);
+
+      setFormData({
+        date: "",
+        supplier: "",
+        status: "",
+        note: ""
+      });
+    }
+  };
+
   /* ---------- UI ---------- */
 
   return (
-
     <HomeLayout>
 
       <FormCard title="Tạo phiếu nhập kho">
 
         <form>
 
+          {/* FORM HEADER */}
           <div className="row">
-            <InputField label="Ngày nhập *" type="date" col="col-md-6"/>
-            <InputField label="Mã phiếu nhập *" placeholder="Nhập mã phiếu" col="col-md-6" required/>
-            <SelectField label="Nhà cung cấp *" options={suppliers} col="col-md-6"/>
-            <SelectField label="Trạng thái" options={statuses} col="col-md-6"/>
+            <SelectField label="Nhà cung cấp *" options={suppliers} col="col-md-6" required  />
+            <SelectField label="Trạng thái" options={statuses} col="col-md-6" />
             <TextAreaField label="Ghi chú" />
           </div>
 
-          <EditableTable title="Danh sách nhập kho" rows={items} columns={importColumns} addRow={addRow} removeRow={removeRow} updateItem={updateItem}>
-            <TableHeader>
-                <th>SKU</th>
-                <th>Tên</th>
-                <th>Giá nhập</th>
-                <th>Số lượng</th>
-                <th>Ngày sản xuất</th>
-                <th>Hạn bảo hành</th>
-            </TableHeader>
+          {/* TABLE */}
+          <EditableTable title="Danh sách sản phẩm" names={importColumns} addRow={addRow}>
+
+            {items.map((item, index) => (
+              <ImportRow key={index} item={item} index={index} products={products} updateItem={updateItem} removeRow={removeRow}/>
+            ))}
+
           </EditableTable>
 
-          {/* Tổng tiền */}
+
+          {/* TOTAL */}
           <div className="text-end mt-3">
             <h5>Tổng tiền: {total.toLocaleString()} đ</h5>
           </div>
 
-          <FormButtons submitText="Tạo phiếu nhập" />
+          {/* SUBMIT */}
+          <FormButtons submitText="Tạo phiếu nhập" addReset={resetForm}/>
 
         </form>
 
       </FormCard>
 
     </HomeLayout>
-
   );
-
 }

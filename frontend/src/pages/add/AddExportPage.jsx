@@ -1,15 +1,13 @@
 import { useState } from "react";
 
 import FormCard from "../../components/addComponent/FormCard";
-import InputField from "../../components/addComponent/InputField";
 import SelectField from "../../components/addComponent/SelectField";
 import TextAreaField from "../../components/addComponent/TextAreaField";
 import FormButtons from "../../components/addComponent/FormButtons";
 
-import EditableTable from "../../components/EditableTable/EditableTable";
-import TableHeader from "../../components/EditableTable/TableHeader";
-
 import HomeLayout from "../../layouts/HomeLayout";
+import EditableTable from "../../components/editlist/EditableTable";
+import ExportRow from "../../components/editlist/row/ExportRow";
 
 export default function AddExportPage() {
 
@@ -17,45 +15,79 @@ export default function AddExportPage() {
 
   const customers = [
     "Khách lẻ",
-    "Nguyễn Văn A",
-    "Công ty XYZ"
+    "Công ty XYZ",
+    "Cửa hàng Hoàng Long"
   ];
 
   const statuses = [
-    "Đang tạo",
-    "Chờ duyệt",
-    "Đã duyệt",
-    "Đã xuất kho"
+    "DRAFT",
+    "PENDING",
+    "APPROVED",
+    "COMPLETED",
+    "CANCELLED"
+  ];
+
+  const products = [
+    { sku: "XML001", title: "Xi măng" },
+    { sku: "XML002", title: "Thép" },
+    { sku: "XML003", title: "Cát" }
   ];
 
   const exportColumns = [
+    { key: "sku", title: "SKU" },
     { key: "product", title: "Sản phẩm" },
-    { key: "quantity", title: "Số lượng", className: "text-center" },
-    { key: "price", title: "Đơn giá", className: "text-end" },
-    { key: "amount", title: "Thành tiền", className: "text-end" },
-    { key: "action", title: "" }
+    { key: "batch", title: "Lô hàng" },
+    { key: "quantity", title: "Số lượng" },
+    { key: "price", title: "Giá bán" },
+    { key: "amount", title: "Thành tiền" }
+  ];
+
+  const batches = [
+    {
+      id: 1,
+      product: "Xi măng",
+      batch_code: "BATCH001",
+      stock: 50
+    },
+    {
+      id: 2,
+      product: "Xi măng",
+      batch_code: "BATCH002",
+      stock: 30
+    },
+    {
+      id: 3,
+      product: "Thép",
+      batch_code: "BATCH003",
+      stock: 20
+    },
+    {
+      id: 4,
+      product: "Cát",
+      batch_code: "BATCH004",
+      stock: 10
+    }
   ];
 
   /* ---------- STATE ---------- */
 
   const [items, setItems] = useState([
-    {
-      product: "",
-      quantity: 1,
-      price: 0
-    }
+    { product: "", sku: "", batch: "", quantity: 1, price: 0 }
   ]);
 
-  /* ---------- FUNCTIONS ---------- */
+  const [formData, setFormData] = useState({
+    customer: "",
+    status: "DRAFT",
+    note: ""
+  });
+
+  /* ---------- HANDLER ---------- */
+
 
   const addRow = () => {
     setItems(prev => [
       ...prev,
-      {
-        product: "",
-        quantity: 1,
-        price: 0
-      }
+      { product: "", sku: "", batch: "", quantity: 1, price: 0 }
     ]);
   };
 
@@ -79,6 +111,17 @@ export default function AddExportPage() {
     0
   );
 
+  const resetForm = () => {
+    if (window.confirm("Bạn có chắc muốn reset?")) {
+      setItems([{ product: "", sku: "", batch: "", quantity: 1, price: 0 }]);
+      setFormData({
+        customer: "",
+        status: "DRAFT",
+        note: ""
+      });
+    }
+  };
+
   /* ---------- UI ---------- */
 
   return (
@@ -88,31 +131,41 @@ export default function AddExportPage() {
 
         <form>
 
+          {/* HEADER */}
           <div className="row">
-            <InputField label="Ngày xuất *" type="date" col="col-md-6"/>
-            <InputField label="Mã phiếu xuất *" placeholder="Nhập mã phiếu" col="col-md-6" required/>
-            <SelectField label="Khách hàng *" options={customers} col="col-md-6"/>
-            <SelectField label="Trạng thái" options={statuses} col="col-md-6"/>
+            <SelectField
+              label="Khách hàng *"
+              options={customers}
+              col="col-md-6"
+              required
+            />
+
+            <SelectField
+              label="Trạng thái"
+              options={statuses}
+              col="col-md-6"
+            />
+
             <TextAreaField label="Ghi chú" />
           </div>
 
-          <EditableTable title="Danh sách xuất kho" rows={items} columns={exportColumns} addRow={addRow} removeRow={removeRow} updateItem={updateItem}>
-            <TableHeader>
-                <th>SKU</th>
-                <th>Tên</th>
-                <th>Giá nhập</th>
-                <th>Số lượng</th>
-                <th>Ngày sản xuất</th>
-                <th>Hạn bảo hành</th>
-            </TableHeader>
+          {/* TABLE */}
+          <EditableTable title="Danh sách sản phẩm" names={exportColumns} addRow={addRow}>
+            {items.map((item, index) => (
+              <ExportRow key={index} item={item} index={index} products={products} batches={batches} updateItem={updateItem} removeRow={removeRow}/>
+            ))}
           </EditableTable>
 
-          {/* Tổng tiền */}
+          {/* TOTAL */}
           <div className="text-end mt-3">
             <h5>Tổng tiền: {total.toLocaleString()} đ</h5>
           </div>
 
-          <FormButtons submitText="Tạo phiếu xuất" />
+          {/* BUTTON */}
+          <FormButtons
+            submitText="Tạo phiếu xuất"
+            addReset={resetForm}
+          />
 
         </form>
 
