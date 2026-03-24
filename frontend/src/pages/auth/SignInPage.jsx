@@ -22,6 +22,10 @@ function PagesLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!username || !password) {
+      setError("Username/Password không được để trống");
+      return;
+    }
     try {
       const res = await loginService(username, password);
       login(res, remember);

@@ -1,4 +1,14 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 function Navbar() {
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        localStorage.removeItem("auth");
+        navigate("/auth/sign-in");
+    }
     return (
         <div className="iq-top-navbar">
             <div className="iq-navbar-custom">
@@ -47,7 +57,7 @@ function Navbar() {
                                                     <p className="mb-0">Since 10 march, 2020</p>
                                                     <div className="d-flex align-items-center justify-content-center mt-3">
                                                         <a href="app/user-profile.html" className="btn border mr-2">Profile</a>
-                                                        <a className="btn border">Sign Out</a>
+                                                        <a className="btn border" onClick={handleLogout}>Đăng xuất</a>
                                                     </div>
                                                 </div>
                                             </div>

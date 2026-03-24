@@ -15562,26 +15562,44 @@ fieldset[disabled] .btn {
       min-height: 480px;
       height: 100% !important; }
 
+/* Container floating-label */
 .floating-label {
   position: relative;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+}
 
-.floating-input:focus ~ label {
-  color: #32BDEA;
-  top: 0;
-  left: 6px;
-  font-size: 10px;
-  background: #ffffff;
-  padding: 5px 8px; }
+/* Input */
+.floating-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #c7cbd3;
+  outline: none;
+}
 
-.floating-input:not(:placeholder-shown) {
+/* Label mặc định nằm giữa input */
+.floating-label label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: #676E8A;
-  border: 1px solid #DCDFE8; }
-  .floating-input:not(:placeholder-shown) ~ label {
-    top: 0;
-    font-size: 14px;
-    background: #ffffff;
-    padding: 5px 8px; }
+  font-size: 14px;
+  font-weight: 400;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+  background: transparent; /* xóa khoảng trắng */
+}
+
+/* Khi input focus hoặc đã có giá trị */
+.floating-input:focus + label,
+.floating-input:not(:placeholder-shown) + label {
+  top: 2px;            /* sát trên input */
+  left: 8px;           /* khoảng cách nhỏ bên trái */
+  font-size: 12px;      /* thu nhỏ label */
+  background: #fff;     /* nền trắng để không bị đè lên input */
+  padding: 0 4px;       /* giảm padding để không tạo khoảng trống */
+  color: #32BDEA;       /* màu label khi active */
+}
 
 @media (min-width: 992px) {
   .lb-img {

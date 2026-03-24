@@ -1,7 +1,7 @@
 function FloatingInput({id, type, label, value, onChange}) {
   return (
     <div className="col-lg-12">
-      <div className="floating-label form-group">
+      <div className={`floating-label form-group ${value ? 'has-value' : ''}`}>
         <input
           id={id}
           className="floating-input form-control"
