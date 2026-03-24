@@ -1,4 +1,4 @@
-function FloatingInput({id, type, label }) {
+function FloatingInput({id, type, label, value, onChange}) {
   return (
     <div className="col-lg-12">
       <div className="floating-label form-group">
@@ -7,6 +7,8 @@ function FloatingInput({id, type, label }) {
           className="floating-input form-control"
           type={type}
           placeholder=" "
+          value={value}
+          onChange={onChange}
         />
         <label>{label}</label>
       </div>

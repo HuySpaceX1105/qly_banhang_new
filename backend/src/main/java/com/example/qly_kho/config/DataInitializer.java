@@ -24,7 +24,7 @@ public class DataInitializer {
             if (userRepository.findByUsername("admin").isEmpty()) {
 
                 User user = User.createUser(
-                        "admin",
+                        "admin@gmail.com",
                         passwordEncoder.encode("123456"),
                         "admin@gmail.com",
                         "System Admin"

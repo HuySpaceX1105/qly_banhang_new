@@ -8,7 +8,7 @@ import ConfirmMailPage from "../pages/auth/ConfirmMailPage";
 function AuthRoutes() {
   return (
     <>
-      <Route path="/auth/" element={<SignInPage />} />
+      <Route path="/auth/sign-in" element={<SignInPage />} />
       <Route path="/auth/sign-up" element={<SignUpPage />} />
       <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
       <Route path="/auth/confirm-mail" element={<ConfirmMailPage />} />

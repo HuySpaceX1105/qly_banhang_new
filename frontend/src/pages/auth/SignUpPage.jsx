@@ -59,7 +59,7 @@ function PagesSignUp() {
         
         {error && <p style={{color:"red"}}>{error}</p>}
         <AuthButton text="Đăng ký" />
-        <AuthFooter text="Đã có tài khoản?" linkText="Đăng nhập" href="/auth/" />
+        <AuthFooter text="Đã có tài khoản?" linkText="Đăng nhập" href="/auth/sign-in" />
 
       </form>
 
