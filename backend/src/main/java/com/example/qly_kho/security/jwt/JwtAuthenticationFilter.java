@@ -28,13 +28,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             throws ServletException, IOException {
 
                 try {
-
-                    String path = request.getRequestURI();
-
-                    if (path.equals("/login.html") || path.startsWith("/api/auth/")) {
-        filterChain.doFilter(request, response); // Cho qua luôn, không kiểm tra token
-        return;
-    }
                     
                     String token = getTokenFromRequest(request);
 

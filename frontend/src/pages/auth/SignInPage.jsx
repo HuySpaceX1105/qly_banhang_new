@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { loginService } from "../../services/authService";
 
 import FloatingInput from "../../components/auth/AuthFloatingInput";
 import AuthCheckBox from "../../components/auth/AuthCheckBox";
@@ -27,10 +26,8 @@ function PagesLogin() {
       return;
     }
     try {
-      const res = await loginService(username, password);
-      login(res, remember);
+      await login(username, password, remember);
       navigate("/");
-      if(remember) localStorage.setItem("auth", JSON.stringify(res));
     } catch (err) {
       setError(err.message);
     }

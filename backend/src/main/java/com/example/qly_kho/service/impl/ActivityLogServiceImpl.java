@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.qly_kho.entity.ActivityLog;
 import com.example.qly_kho.entity.User;
-import com.example.qly_kho.repository.ActivityLogRespository;
+import com.example.qly_kho.repository.ActivityLogRepository;
 import com.example.qly_kho.repository.UserRepository;
 import com.example.qly_kho.service.ActivityLogService;
 
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class ActivityLogServiceImpl implements ActivityLogService{
 
-    private final ActivityLogRespository activityLogRespository;
+    private final ActivityLogRepository activityLogRespository;
     private final UserRepository userRepository;
 
     @Override

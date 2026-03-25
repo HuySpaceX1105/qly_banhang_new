@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.example.qly_kho.entity.ActivityLog;
 
-public interface ActivityLogRespository extends JpaRepository<ActivityLog, Long>, JpaSpecificationExecutor<ActivityLog>{
+public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long>, JpaSpecificationExecutor<ActivityLog>{
     
 }

@@ -12,7 +12,7 @@ public interface UserMapper {
 
     @Mapping(source = "id", target = "userId")
     @Mapping(source = "roles", target = "roles")
-    AuthUserResponse authUserResponse(User user);
+    AuthUserResponse toAuthUserResponse(User user);
 
     default String mapRoleToString(Role role) {
         return role.getName();

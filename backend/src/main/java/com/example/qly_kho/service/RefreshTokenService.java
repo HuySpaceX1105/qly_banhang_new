@@ -1,0 +1,13 @@
+package com.example.qly_kho.service;
+
+public interface RefreshTokenService {
+
+    //thêm refresh token khi user đăng nhập vào db
+    public void addRefreshTokenFromUsername(String token, String username);
+
+    //kiểm tra refresh token hợp lệ, chưa bị revoked, chưa hết hạn
+    public boolean validateRefreshToken(String token, Long userId);
+
+    //vô hiệu tất cả các refresh token của user
+    public void revokeRefreshTokenFromUserId(Long userId);
+}

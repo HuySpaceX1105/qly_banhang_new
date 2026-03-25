@@ -77,6 +77,7 @@ public class JwtProvider {
         return claims.getSubject();
     }
 
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -98,5 +99,12 @@ public class JwtProvider {
 
            return true;
         }
+    }
+
+    public long getAccessExpiration() {
+        return jwtProperties.accessExpire();
+    }
+    public long getRefreshExpiration() {
+        return jwtProperties.refreshExpire();
     }
 }

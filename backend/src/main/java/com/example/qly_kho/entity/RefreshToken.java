@@ -65,4 +65,8 @@ public class RefreshToken {
 
         return newRefreshToken;
     }
+
+    public void setRevoked(boolean revoked) {
+        this.revoked = revoked;
+    }
 }
