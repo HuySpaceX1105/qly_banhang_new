@@ -7,6 +7,7 @@ public final class ActionConstants {
     }
     
     public static final String LOGIN = "LOGIN";
+    public static final String LOGOUT = "LOGOUT";
 
     public static final String ENTITY_USER = "ENTITY_USER";
 }

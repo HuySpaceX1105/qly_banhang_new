@@ -9,6 +9,8 @@ public interface AuthService {
     
     //xử lý đăng nhập
     AuthResponse login(LoginRequest loginRequest );
+
+    void logout(String refreshToken);
     
     AuthUserResponse getAuthUserResponseFromRefreshToken(String refreshToken);
 

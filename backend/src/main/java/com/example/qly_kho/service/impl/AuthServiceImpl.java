@@ -79,6 +79,26 @@ public class AuthServiceImpl implements AuthService{
         
     }
 
+    
+
+    @Override
+    public void logout(String refreshToken) {
+        if(refreshToken != null) {
+                Long userId = getUserFromRefreshToken(refreshToken).getId();
+                if(userId != null) {
+                    revokeRefreshTokenFromUserId(userId);
+                    activityLogService.logActivity(
+                        userId, 
+                        ActionConstants.LOGOUT, 
+                        ActionConstants.ENTITY_USER, 
+                        userId, 
+                        "User logged out successfully", 
+                        "127.0.0.1"
+                    );
+                }
+            }
+    }
+
     @Override
     public User getUserFromRefreshToken(String refreshToken) {
         String username = jwtProvider.getUsernameFromToken(refreshToken);

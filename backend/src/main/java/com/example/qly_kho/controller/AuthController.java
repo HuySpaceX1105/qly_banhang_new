@@ -34,7 +34,7 @@
             Cookie refreshTokenCookie = new Cookie("refreshToken", authResponse.refreshToken());
             refreshTokenCookie.setHttpOnly(true);
             refreshTokenCookie.setSecure(false);//dev
-            refreshTokenCookie.setPath("/api/auth/refresh-token");
+            refreshTokenCookie.setPath("/api/auth/");
             refreshTokenCookie.setMaxAge(24 * 60 * 60);
 
             response.addCookie(refreshTokenCookie);
@@ -66,6 +66,7 @@
         @PostMapping("/logout")
         public ResponseEntity<Void> logout(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
 
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + refreshToken);
             Cookie cookie = new Cookie("refreshToken", null);
             cookie.setHttpOnly(true);
             cookie.setSecure(false);//dev
@@ -73,11 +74,8 @@
             cookie.setPath("/api/auth/refresh-token");
             response.addCookie(cookie);
 
-            if(refreshToken != null) {
-                Long userId = authService.getUserFromRefreshToken(refreshToken).getId();
-                if(userId != null)
-                authService.revokeRefreshTokenFromUserId(userId);
-            }
+            authService.logout(refreshToken);
+
             return ResponseEntity.ok().build();
         }
     }
