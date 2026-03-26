@@ -6,8 +6,10 @@ public final class ActionConstants {
         throw new UnsupportedOperationException("Cannot instantiate constant class");
     }
     
+    //action
     public static final String LOGIN = "LOGIN";
     public static final String LOGOUT = "LOGOUT";
 
+    //entity
     public static final String ENTITY_USER = "ENTITY_USER";
 }

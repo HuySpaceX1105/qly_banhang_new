@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.qly_kho.constant.AppConstants;
+import com.example.qly_kho.exception.custom.UnauthorizedException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -40,8 +41,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
-                } catch (Exception e) {}
-
+                } catch (UnauthorizedException e) {
+                    // JWT invalid / expired
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+                    return; // dừng chain
+                } catch (Exception e) {
+                    // Các lỗi khác
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error in JWT filter");
+                    return;
+                }
                 filterChain.doFilter(request, response);
 
     } 

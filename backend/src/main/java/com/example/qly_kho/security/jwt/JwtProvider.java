@@ -9,8 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.example.qly_kho.config.JwtProperties;
+import com.example.qly_kho.exception.custom.UnauthorizedException;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -39,6 +42,7 @@ public class JwtProvider {
                 .compact();
     }    
 
+
     public String generateAccessTokenFromUsername(String username) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtProperties.accessExpire());
@@ -64,17 +68,36 @@ public class JwtProvider {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-
-        return Jwts.parserBuilder()
+        try {
+            return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new UnauthorizedException(
+                String.format("JWT token has expired in JwtProvider : %s", e.getMessage())
+            );
+        } catch (JwtException e) {
+            throw new UnauthorizedException(
+                String.format("JWT token is invalid in JwtProvider : %s", e.getMessage())
+            );
+        }
     }
 
     public String getUsernameFromToken(String token) {
-        Claims claims = getAllClaimsFromToken(token);
-        return claims.getSubject();
+        try {
+            Claims claims = getAllClaimsFromToken(token);
+            return claims.getSubject();
+        } catch (ExpiredJwtException e) {
+            throw new UnauthorizedException(
+                String.format("JWT token has expired in JwtProvider : %s", e.getMessage())
+            );
+        } catch (JwtException e) {
+            throw new UnauthorizedException(
+                String.format("JWT token is invalid in JwtProvider : %s", e.getMessage())
+            );
+        }
     }
 
 
@@ -86,8 +109,10 @@ public class JwtProvider {
                 .parseClaimsJws(token);
 
             return true;    
-        } catch (Exception e) {
-            return false;
+        } catch (JwtException e) {
+            throw new UnauthorizedException(
+                String.format("JWT token is invalid in JwtProvider : %s", e.getMessage())
+            );
         }
     } 
     
@@ -95,9 +120,10 @@ public class JwtProvider {
         try {
             Claims claims = getAllClaimsFromToken(token);
             return claims.getExpiration().before(new Date());
-        } catch (Exception e) {
-
-           return true;
+        } catch (ExpiredJwtException e) {
+            throw new UnauthorizedException(
+                String.format("JWT token has expired in JwtProvider : %s", e.getMessage())
+            );
         }
     }
 

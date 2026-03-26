@@ -54,6 +54,8 @@
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                 }
                 
+
+                
                 String accessToken = authService.generateAccessTokenFromRefreshToken(refreshToken);
                 return ResponseEntity.ok(new AuthResponse(
                     accessToken, 
@@ -65,13 +67,16 @@
 
         @PostMapping("/logout")
         public ResponseEntity<Void> logout(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
+            
+            if(refreshToken == null || !authService.validateRefreshToken(refreshToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
 
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + refreshToken);
             Cookie cookie = new Cookie("refreshToken", null);
             cookie.setHttpOnly(true);
             cookie.setSecure(false);//dev
             cookie.setMaxAge(0);
-            cookie.setPath("/api/auth/refresh-token");
+            cookie.setPath("/api/auth/");
             response.addCookie(cookie);
 
             authService.logout(refreshToken);

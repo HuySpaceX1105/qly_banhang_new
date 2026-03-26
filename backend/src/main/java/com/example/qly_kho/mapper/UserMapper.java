@@ -9,7 +9,7 @@ import com.example.qly_kho.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-
+    
     @Mapping(source = "id", target = "userId")
     @Mapping(source = "roles", target = "roles")
     AuthUserResponse toAuthUserResponse(User user);

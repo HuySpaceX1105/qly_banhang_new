@@ -50,6 +50,7 @@ function PagesSignUp() {
         <div className="row">
           <FloatingInput id="name" type="text" label="Họ và tên" />
           <FloatingInput id="email" type="email" label="Email" />
+          <FloatingInput id="username" type="text" label="Username" />
           <FloatingInput id="password" type="password" label="Mật khẩu"/>
           <FloatingInput id="confirmPassword" type="password" label="Xác nhận mật khẩu" />
 
