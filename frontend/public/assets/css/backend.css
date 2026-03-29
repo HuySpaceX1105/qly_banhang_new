@@ -2343,7 +2343,7 @@ textarea.form-control {
 .custom-control {
   position: relative;
   display: block;
-  min-height: 24;
+  min-height: 24px;
   padding-left: 1.5rem; }
 
 .custom-control-inline {
@@ -2351,12 +2351,12 @@ textarea.form-control {
   margin-right: 1rem; }
 
 .custom-control-input {
-  position: absolute;
+   position: absolute;
   left: 0;
-  z-index: -1;
   width: 1rem;
-  height: 12.5rem;
-  opacity: 0; }
+  height: 1rem; /* FIX */
+  opacity: 0;
+  z-index: 1; /* hoặc bỏ luôn -1 */}
   .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
     border-color: #32BDEA;

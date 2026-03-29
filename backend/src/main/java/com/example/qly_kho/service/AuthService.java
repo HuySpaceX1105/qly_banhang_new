@@ -1,9 +1,8 @@
 package com.example.qly_kho.service;
 
 import com.example.qly_kho.dto.request.LoginRequest;
+import com.example.qly_kho.dto.request.RegisterRequest;
 import com.example.qly_kho.dto.response.AuthResponse;
-import com.example.qly_kho.dto.response.AuthUserResponse;
-import com.example.qly_kho.entity.User;
 
 public interface AuthService {
     
@@ -11,15 +10,9 @@ public interface AuthService {
     AuthResponse login(LoginRequest loginRequest );
 
     void logout(String refreshToken);
-    
-    AuthUserResponse getAuthUserResponseFromRefreshToken(String refreshToken);
 
-    boolean validateRefreshToken(String token);
+    void register(RegisterRequest registerRequest);
 
-    String generateAccessTokenFromRefreshToken(String refreshToken);
-
-    User getUserFromRefreshToken(String refreshToken);
-
-    void revokeRefreshTokenFromUserId(Long userId);
+    AuthResponse refreshToken(String refreshToken);
 
 }

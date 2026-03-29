@@ -1,43 +1,61 @@
-export async function loginService(username, password) {
-    const res = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-    });
+import { publicAxios } from "../api/publicAxiosCilent";
+import { getAccessToken } from "../api/tokenService";
 
-    if (!res.ok) {
-        throw new Error("Login failed");
-    }
+export const loginService = async (username, password) => {
+    const res = await publicAxios.post(
+        "auth/login", 
+        { 
+            username, 
+            password 
+        }
+    );
+    
+    const auth = res.data;
+    console.log(auth);
 
-    return res.json();
+    localStorage.setItem(
+        "auth", 
+        JSON.stringify(res.data)
+    );
+
+    return auth;
 }
 
-export async function logoutService() {
-    const res = await fetch("http://localhost:8080/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-    });
-
-    if (!res.ok) {
-        throw new Error("Logout failed");
+export const logoutService = async () => {
+    try {
+        await publicAxios.post(
+            "auth/logout",
+            {},
+            {withCredentials: true}
+        );
+    } catch (error) {
+        console.log(error);
+    } finally {
+       localStorage.removeItem("auth");
     }
-
-    const text = await res.text();
-    return text ? JSON.parse(text) : null;
 }
 
-export async function refreshTokenService() {
-    const res = await fetch("http://localhost:8080/api/auth/refresh-token", {
-        method: "POST",
-        credentials: "include",
-    });
-
-    if(!res.ok) {
-        throw new Error("Refresh token failed");
+export const registerService = async (data) => {
+    try {
+        await publicAxios.post(
+            "auth/register", 
+            data
+        );
+    } catch (error) {
+        console.log(error);
     }
-
-    return res.json();
 }
+
+export const refreshTokenService = async () => {
+    const res = await publicAxios.post(
+        "auth/refresh-token",
+        {}, 
+        {withCredentials: true}
+    );
+
+    localStorage.setItem(
+        "auth", 
+        JSON.stringify(res.data)
+    );
+    return res.data;
+}    

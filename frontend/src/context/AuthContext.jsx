@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { loginService, logoutService, refreshTokenService } from "../services/authService";
+import { loginService, logoutService, registerService, refreshTokenService } from "../services/authService";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [auth, setAuth] = useState(null); // 👈 state auth
+    const [auth, setAuth] = useState(() => {
+        return JSON.parse(localStorage.getItem("auth") || "null");
+    }); // 👈 state auth
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -32,6 +34,14 @@ export function AuthProvider({ children }) {
         localStorage.removeItem("auth");
     };
 
+    const register = async (data) => {
+        try {
+            await registerService(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const initAuth = async () => {
         const auth = localStorage.getItem("auth");
         if (!auth) {
@@ -53,7 +63,7 @@ export function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ auth, loading, setAuth, login, logout }}>
+        <AuthContext.Provider value={{ auth, loading, setAuth, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     );

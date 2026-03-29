@@ -154,4 +154,23 @@ public class User {
 
         return newUser;
     }
+
+    public void addRole(Role role) {
+        if (role == null) return;
+
+        this.roles.add(role);
+    }
+    public void removeRole(Role role) {
+        if (role == null) return;
+        
+        this.roles.remove(role);
+    }
+
+    public void disable() {
+        this.enabled = false;
+    }
+
+    public void enable() {
+        this.enabled = true;
+    }
 }

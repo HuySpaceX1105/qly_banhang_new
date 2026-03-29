@@ -54,7 +54,7 @@ function Navbar() {
                                                         className="rounded profile-img img-fluid avatar-70"/>
                                                 </div>
                                                 <div className="p-3">
-                                                    <h5 className="mb-1">{auth?.user?.username}</h5>
+                                                    <h5 className="mb-1">{auth?.user?.fullName}</h5>
                                                     <p className="mb-0">{auth?.user?.email}</p>
                                                     <div className="d-flex align-items-center justify-content-center mt-3">
                                                         <a href="app/user-profile.html" className="btn border mr-2">Profile</a>

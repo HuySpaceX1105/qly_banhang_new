@@ -11,12 +11,11 @@ import com.example.qly_kho.entity.RefreshToken;
 import com.example.qly_kho.entity.User;
 import com.example.qly_kho.exception.ErrorCode;
 import com.example.qly_kho.exception.custom.AppException;
-import com.example.qly_kho.exception.custom.NotFoundException;
 import com.example.qly_kho.exception.custom.UnauthorizedException;
 import com.example.qly_kho.repository.RefreshTokenRepository;
-import com.example.qly_kho.repository.UserRepository;
 import com.example.qly_kho.security.jwt.JwtProvider;
 import com.example.qly_kho.service.RefreshTokenService;
+import com.example.qly_kho.service.UserService;
 import com.example.qly_kho.util.SHA256Hasher;
 
 import jakarta.transaction.Transactional;
@@ -28,16 +27,14 @@ import lombok.RequiredArgsConstructor;
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final JwtProvider jwtProvider;
+    
     @Override
     public void addRefreshTokenFromUsername(String token, String username) {
 
         String tokenHash = SHA256Hasher.hash(token);
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(()-> new NotFoundException(
-                String.format("User with (username: %s) not found in RefreshTokenService", username)
-            ));
+        User user = userService.findByUsername(username);
         LocalDateTime expiryDate = LocalDateTime.ofInstant(Instant.now().plusMillis(jwtProvider.getRefreshExpiration()), ZoneId.systemDefault());
         
         try {
@@ -51,21 +48,23 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public boolean validateRefreshToken(String token, Long userId) {
+    public void validateRefreshToken(String token) {
+        String tokenHash = SHA256Hasher.hash(token);
         LocalDateTime now = LocalDateTime.now();
 
-        Set<RefreshToken> tokens = refreshTokenRepository.findAllByUserId(userId);
+        RefreshToken refreshToken = refreshTokenRepository
+                .findByTokenHash(tokenHash)
+                .orElseThrow(() -> new UnauthorizedException(
+                        "Refresh token is invalid"
+                ));
 
-        // Kiểm tra token hợp lệ: chưa revoke, chưa hết hạn, matches hash
-        boolean isValid = tokens.stream()
-                            .anyMatch(rt -> !rt.isRevoked()
-                                        && rt.getExpiryDate().isAfter(now)
-                                        && SHA256Hasher.hash(token).equals(rt.getTokenHash()));
-
-        if (!isValid) {
-            throw new UnauthorizedException("Refresh token is invalid in RefreshTokenService");
+        if (refreshToken.isRevoked()) {
+            throw new UnauthorizedException("Refresh token is revoked");
         }
-        return true;
+
+        if (refreshToken.getExpiryDate().isBefore(now)) {
+            throw new UnauthorizedException("Refresh token is expired");
+        }
     }
 
     @Override
