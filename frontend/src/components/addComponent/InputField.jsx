@@ -3,7 +3,9 @@ export default function InputField({
   placeholder,
   required = false,
   type = "text",
-  col = "col-md-12"
+  col = "col-md-12",
+  value,
+  onChange
 }) {
   return (
     <div className={col}>
@@ -15,6 +17,8 @@ export default function InputField({
           className="form-control"
           placeholder={placeholder}
           required={required}
+          value={value}
+          onChange={onChange}
         />
 
         <div className="help-block with-errors"></div>

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.qly_kho.dto.request.LoginRequest;
-import com.example.qly_kho.dto.request.RegisterRequest;
+import com.example.qly_kho.dto.request.auth.LoginRequest;
+import com.example.qly_kho.dto.request.auth.RegisterRequest;
 import com.example.qly_kho.dto.response.AuthResponse;
 import com.example.qly_kho.service.AuthService;
 

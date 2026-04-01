@@ -9,11 +9,16 @@ import AddInventoryAdjustmentPage from "../pages/add/AddInventoryAdjustmentPage"
 import AddSupplierPage from "../pages/add/AddSupplierPage";
 import AddCustomerPage from "../pages/add/AddCustomerPage";
 import AddUserPage from "../pages/add/AddUserPage";
+import PrivateRoute from "./PrivateRoute";
 
 function AddRoutes() {
   return (
     <>
-      <Route path="/product/add" element={<AddProductPage />} />
+      <Route path="/product/add" element={
+                                    <PrivateRoute>
+                                      <AddProductPage />
+                                    </PrivateRoute>
+                                  }/>
       <Route path="/category/add" element={<AddCategoryPage />} />
       <Route path="/partner/suppliers/add" element={<AddSupplierPage />} />
       <Route path="/partner/customers/add" element={<AddCustomerPage />} />

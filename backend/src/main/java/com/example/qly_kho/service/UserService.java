@@ -1,15 +1,22 @@
 package com.example.qly_kho.service;
 
+import java.util.Set;
+
 import com.example.qly_kho.entity.User;
 
 public interface UserService {
+
+    //tìm kiếm user theo username
     User findByUsername(String username);
 
+    //tìm kiếm user theo id
     User findById(Long id);
 
-    User createUser(User user);
+    //tạo user
+    User saveUser(User user);
 
-    void assignRoleToUser(Long userId, Long roleId);
+    //lấy user id theo vai trò 
+    Set<Long> findUserIdByRoleId(Long roleId);
 
-    void removeRoleFromUser(Long userId, Long roleId);
+    void incrementPermissionVersionByUserIds(Set<Long> userIds);
 }

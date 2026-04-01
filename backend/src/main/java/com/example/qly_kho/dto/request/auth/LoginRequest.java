@@ -1,4 +1,4 @@
-package com.example.qly_kho.dto.request;
+package com.example.qly_kho.dto.request.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -2,11 +2,10 @@ package com.example.qly_kho.security.userdetails;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.qly_kho.entity.User;
-import com.example.qly_kho.repository.UserRepository;
+import com.example.qly_kho.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,14 +13,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService{
     
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        User user = userRepository.findByUsername(username)
-                    .orElseThrow(()-> new UsernameNotFoundException("User not found with username: " + username));
-
+    public UserDetails loadUserByUsername(String username){
+        User user = userService.findByUsername(username);
         return new CustomUserDetails(user);         
     }
 

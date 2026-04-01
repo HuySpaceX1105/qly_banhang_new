@@ -53,6 +53,9 @@ export const refreshTokenService = async () => {
         {withCredentials: true}
     );
 
+    const auth = res.data;
+    console.log(auth);
+
     localStorage.setItem(
         "auth", 
         JSON.stringify(res.data)

@@ -65,6 +65,12 @@ public class User {
     @Column(name = "credentials_non_expired", nullable = false)
     private boolean credentialsNonExpired = true;
 
+    @Column(name = "auth_version", nullable = false)
+    private Long authVersion = 1L;
+
+    @Column(name = "permission_version", nullable = false)
+    private Long permissionVersion = 1L;
+
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -159,11 +165,21 @@ public class User {
         if (role == null) return;
 
         this.roles.add(role);
+        role.getUsers().add(this);
     }
     public void removeRole(Role role) {
         if (role == null) return;
         
         this.roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
+    public void increaseAuthVersion() {
+        this.authVersion++;
+    }
+
+    public void increasePermissionVersion() {
+        this.permissionVersion++;
     }
 
     public void disable() {

@@ -1,11 +1,10 @@
 package com.example.qly_kho.service.impl;
 
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.core.NestedExceptionUtils;
+import java.util.Set;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.example.qly_kho.entity.Role;
 import com.example.qly_kho.entity.User;
 import com.example.qly_kho.exception.custom.DuplicateException;
 import com.example.qly_kho.exception.custom.NotFoundException;
@@ -21,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleService roleService;
 
     @Override
     public User findByUsername(String username) {
@@ -41,51 +39,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
-        try {
-            User savedUser = userRepository.save(user);
-            //gán role nhân viên cho user
-            Role role = roleService.findById(3L);
-            savedUser.addRole(role);
+    public User saveUser(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new DuplicateException("Username already exists in UserService");
+        }
 
-            return userRepository.save(savedUser);
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new DuplicateException("Email already exists in UserService");
+        }
+
+        try {
+            return userRepository.save(user);
 
         } catch (DataIntegrityViolationException ex) {
-             String message = "Duplicate data";
-
-            Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(ex);
-
-            if (rootCause instanceof ConstraintViolationException cve) {
-                String constraint = cve.getConstraintName();
-
-                if ("uk_users_username".equals(constraint)) {
-                    message = "Username already exists";
-                } else if ("uk_users_email".equals(constraint)) {
-                    message = "Email already exists";
-                }
-            }
-
-            throw new DuplicateException(message);
+            throw new DuplicateException("Duplicate data in UserService: " + ex.getMessage());
         }
     }
 
     @Override
-    public void assignRoleToUser(Long userId, Long roleId) {
-        User user = findById(userId);
-        Role role = roleService.findById(roleId);
-
-        user.addRole(role);
-
-        userRepository.save(user);
+    public Set<Long> findUserIdByRoleId(Long roleId) {
+       return userRepository.findUserIdByRoleId(roleId);
     }
 
     @Override
-    public void removeRoleFromUser(Long userId, Long roleId) {
-        User user = findById(userId);
-        Role role = roleService.findById(roleId);
-
-        user.removeRole(role);
-
-        userRepository.save(user);
+    public void incrementPermissionVersionByUserIds(Set<Long> userIds) {
+        userRepository.incrementPermissionVersionByUserIds(userIds);
     }
+    
 }

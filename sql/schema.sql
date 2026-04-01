@@ -13,7 +13,8 @@ CREATE TABLE users (
     account_non_locked BOOLEAN DEFAULT TRUE,
     credentials_non_expired BOOLEAN DEFAULT TRUE,
 
-    version BIGINT NOT NULL DEFAULT 1,
+    auth_version BIGINT DEFAULT 1,
+    permission_version BIGINT DEFAULT 1,
 
     created_at TIMESTAMP,
     updated_at TIMESTAMP,

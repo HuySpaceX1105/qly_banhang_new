@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.example.qly_kho.config.JwtProperties;
 import com.example.qly_kho.exception.custom.UnauthorizedException;
+import com.example.qly_kho.security.jwt.payload.AccessTokenPayload;
+import com.example.qly_kho.security.jwt.payload.RefreshTokenPayLoad;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,13 +31,14 @@ public class JwtProvider {
         this.jwtProperties = jwtProperties;
     }
 
-    public String generateAccessToken(Authentication authentication) {
+    public String generateAccessToken(Authentication authentication, Long version) {
         String username = authentication.getName();
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtProperties.accessExpire());
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("version", version)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(secretKey, SignatureAlgorithm.HS512)
@@ -43,24 +46,27 @@ public class JwtProvider {
     }    
 
 
-    public String generateAccessTokenFromUsername(String username) {
+    public String generateAccessTokenFromUsername(String username, Long authVersion, Long permissionVersion) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtProperties.accessExpire());
 
         return Jwts.builder()
             .setSubject(username)
+            .claim("authVersion", authVersion)
+            .claim("permissionVersion", permissionVersion)
             .setIssuedAt(now)
             .setExpiration(expiry)
             .signWith(secretKey, SignatureAlgorithm.HS512)
             .compact();
     }
 
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(String username, Long authVersion) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtProperties.refreshExpire());
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("authVersion", authVersion)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(secretKey, SignatureAlgorithm.HS512)
@@ -86,44 +92,42 @@ public class JwtProvider {
     }
 
     public String getUsernameFromToken(String token) {
-        try {
-            Claims claims = getAllClaimsFromToken(token);
-            return claims.getSubject();
-        } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException(
-                String.format("JWT token has expired in JwtProvider : %s", e.getMessage())
-            );
-        } catch (JwtException e) {
-            throw new UnauthorizedException(
-                String.format("JWT token is invalid in JwtProvider : %s", e.getMessage())
-            );
-        }
+
+        Claims claims = getAllClaimsFromToken(token);
+        return claims.getSubject();
+        
     }
 
+    public AccessTokenPayload parseAccessToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        
+        return new AccessTokenPayload(
+            claims.getSubject(),
+            claims.get("authVersion", Long.class),
+            claims.get("permissionVersion", Long.class)
+        );
+    }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token);
+    public RefreshTokenPayLoad parseRefreshToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        
+        return new RefreshTokenPayLoad(
+            claims.getSubject(),
+            claims.get("authVersion", Long.class)
+        );
+    }
 
-            return true;    
-        } catch (JwtException e) {
-            throw new UnauthorizedException(
-                String.format("JWT token is invalid in JwtProvider : %s", e.getMessage())
-            );
-        }
-    } 
-    
     public boolean isTokenExpired(String token) {
         try {
-            Claims claims = getAllClaimsFromToken(token);
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
             return claims.getExpiration().before(new Date());
         } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException(
-                String.format("JWT token has expired in JwtProvider : %s", e.getMessage())
-            );
+            return true; // ✅ đúng logic
         }
     }
 

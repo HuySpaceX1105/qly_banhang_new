@@ -64,4 +64,19 @@ public class Role {
 
         return newRole;
     }
+
+    public void addPermission(Permission permission) {
+        if (permission == null) return;
+
+        this.permissions.add(permission);
+        permission.getRoles().add(this);
+
+    }
+
+    public void removePermission(Permission permission) {
+        if (permission == null) return;
+        
+        this.permissions.remove(permission);
+        permission.getRoles().remove(this);
+    }
 }

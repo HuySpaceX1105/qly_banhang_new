@@ -3,9 +3,11 @@ package com.example.qly_kho;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 
 import com.example.qly_kho.config.JwtProperties;
 
+@EnableCaching
 @SpringBootApplication
 @EnableConfigurationProperties(JwtProperties.class)
 public class QlyKhoApplication {

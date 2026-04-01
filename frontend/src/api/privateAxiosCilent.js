@@ -7,13 +7,14 @@ import { refreshTokenService } from "../services/authService";
 let isRefreshing = false;
 let pendingQueue = [];
 
-const privateAxios = axios.create({
+export const privateAxios = axios.create({
     baseURL: "http://localhost:8080/api/",
     withCredentials: true,
 });
 
 privateAxios.interceptors.request.use((config) => {
     const token = getAccessToken();
+
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -54,6 +55,6 @@ privateAxios.interceptors.response.use(
                 isRefreshing = false;
             }
         }
-        return handleApiError(error);
+        return Promise.reject(handleApiError(error));
     }
 );

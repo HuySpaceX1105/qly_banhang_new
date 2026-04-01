@@ -1,22 +1,17 @@
 export const handleApiError = (error) => {
-    if(!error.response) return {
-        status: 500,
-        code: "NETWORK_ERROR",
-        message: "Không kết nối được server"
-    };
+    const data = error.response?.data;
 
-    const data = error.response.data;
-
-    if(data?.code && data?.message) {
+    if (!error.response) {
         return {
-            status: data.status,
-            code: data.code,
-            message: data.message
-        }
+            status: 0,
+            code: "NETWORK_ERROR",
+            message: "Không kết nối được server"
+        };
     }
 
     return {
-        message: "Lỗi không xác định",
-        code: "UNKNOWN_ERROR"
-    }; 
+        status: error.response.status,
+        code: data?.code || "UNKNOWN_ERROR",
+        message: data?.message || error.response.statusText || "Lỗi không xác định"
+    };
 };

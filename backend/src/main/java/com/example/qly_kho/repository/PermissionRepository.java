@@ -1,11 +1,12 @@
 package com.example.qly_kho.repository;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.qly_kho.entity.Role;
+import com.example.qly_kho.entity.Permission;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    boolean existsByName(String name);
+public interface PermissionRepository  extends JpaRepository<Permission, Long> {
+    
 }

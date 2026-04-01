@@ -1,7 +1,7 @@
-export default function FormButtons({ submitText, addReset }) {
+export default function FormButtons({ onClick, submitText, addReset }) {
   return (
     <>
-      <button type="submit" className="btn btn-primary mr-2">
+      <button type="submit" className="btn btn-primary mr-2" onClick={onClick}>
         {submitText}
       </button>
 

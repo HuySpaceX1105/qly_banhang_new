@@ -8,16 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.qly_kho.constant.ActionConstants;
 import com.example.qly_kho.constant.AppConstants;
-import com.example.qly_kho.dto.request.LoginRequest;
-import com.example.qly_kho.dto.request.RegisterRequest;
+import com.example.qly_kho.dto.request.auth.LoginRequest;
+import com.example.qly_kho.dto.request.auth.RegisterRequest;
 import com.example.qly_kho.dto.response.AuthResponse;
+import com.example.qly_kho.entity.Role;
 import com.example.qly_kho.entity.User;
 import com.example.qly_kho.exception.custom.UnauthorizedException;
 import com.example.qly_kho.mapper.AuthMapper;
 import com.example.qly_kho.security.jwt.JwtProvider;
+import com.example.qly_kho.security.jwt.payload.RefreshTokenPayLoad;
 import com.example.qly_kho.service.ActivityLogService;
 import com.example.qly_kho.service.AuthService;
 import com.example.qly_kho.service.RefreshTokenService;
+import com.example.qly_kho.service.RoleService;
 import com.example.qly_kho.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImpl implements AuthService{
 
     private final UserService userService;
+    private final RoleService roleService;
     private final ActivityLogService activityLogService;
     private final RefreshTokenService refreshTokenService;
     private final AuthenticationManager authenticationManager;
@@ -50,8 +54,8 @@ public class AuthServiceImpl implements AuthService{
         
         User user = userService.findByUsername(request.username());
 
-        String accessToken = jwtProvider.generateAccessTokenFromUsername(user.getUsername());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getUsername());    
+        String accessToken = jwtProvider.generateAccessTokenFromUsername(user.getUsername(), user.getAuthVersion(), user.getPermissionVersion());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getUsername(), user.getAuthVersion());    
 
         activityLogService.logActivity(
             user.getId(), 
@@ -104,7 +108,11 @@ public class AuthServiceImpl implements AuthService{
             registerRequest.fullName()
         );
         
-        User savedUser = userService.createUser(newUser);
+        User savedUser = userService.saveUser(newUser);
+        Role role = roleService.findById(3L);
+        savedUser.addRole(role);
+
+        userService.saveUser(savedUser);
 
         activityLogService.logActivity(
             savedUser.getId(), 
@@ -121,13 +129,22 @@ public class AuthServiceImpl implements AuthService{
     public AuthResponse refreshToken(String refreshToken) {
 
         //kiểm tra refresh token hợp lệ, chưa bị revoked, chưa hết hạn và lấy username từ refresh token
-        String username = jwtProvider.getUsernameFromToken(refreshToken);
+        RefreshTokenPayLoad refreshTokenPayLoad = jwtProvider.parseRefreshToken(refreshToken);
+        String username = refreshTokenPayLoad.username();
+        Long authVersion = refreshTokenPayLoad.authVersion();
+
+        //tìm kiếm user theo username
         User user = userService.findByUsername(username);
+        if(!authVersion.equals(user.getAuthVersion())) {
+            throw new UnauthorizedException(
+                String.format("Invalid refresh token for user: %s in AuthService", username)
+            );
+        }
 
         //kiểm tra refresh token hợp lệ, chưa bị revoked, chưa hết hạn
         refreshTokenService.validateRefreshToken(refreshToken);
 
-        String accessToken = jwtProvider.generateAccessTokenFromUsername(user.getUsername());
+        String accessToken = jwtProvider.generateAccessTokenFromUsername(user.getUsername(), user.getAuthVersion(), user.getPermissionVersion());
 
         return authMapper.toAuthResponse(accessToken, null, AppConstants.JWT_PREFIX, user);
     }
