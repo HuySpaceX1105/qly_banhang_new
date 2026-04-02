@@ -4,5 +4,5 @@ public record AuthResponse(
     String accessToken,
     String refreshToken,
     String tokenType,
-    AuthUserResponse user //userId, username, roles
+    AuthUserResponse user //userId, username, roles, fullName, email
 ) {}

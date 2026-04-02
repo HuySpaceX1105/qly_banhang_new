@@ -20,8 +20,6 @@ public class CategoryController {
     
     private final CategoryService categoryService;
 
-    
-    
     @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
     @PostMapping("/add")
     public ResponseEntity<Void> createCategory(@RequestBody @Valid CreateCategoryRequest request) {

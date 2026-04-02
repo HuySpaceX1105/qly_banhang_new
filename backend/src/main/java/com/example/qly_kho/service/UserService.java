@@ -15,8 +15,12 @@ public interface UserService {
     //tạo user
     User saveUser(User user);
 
+    //cập nhật user
+    User updateUser(User user);
+
     //lấy user id theo vai trò 
     Set<Long> findUserIdByRoleId(Long roleId);
 
+    //
     void incrementPermissionVersionByUserIds(Set<Long> userIds);
 }

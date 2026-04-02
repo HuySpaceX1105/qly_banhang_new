@@ -55,6 +55,13 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateException("Duplicate data in UserService: " + ex.getMessage());
         }
     }
+    
+
+    @Override
+    public User updateUser(User user) {
+
+        return userRepository.save(user);
+    }
 
     @Override
     public Set<Long> findUserIdByRoleId(Long roleId) {

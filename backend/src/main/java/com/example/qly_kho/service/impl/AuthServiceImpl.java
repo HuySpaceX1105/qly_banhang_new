@@ -100,7 +100,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void register(RegisterRequest registerRequest) {
-
         User newUser = User.createUser(
             registerRequest.username(),
             passwordEncoder.encode(registerRequest.password()),
@@ -109,16 +108,17 @@ public class AuthServiceImpl implements AuthService{
         );
         
         User savedUser = userService.saveUser(newUser);
+
         Role role = roleService.findById(3L);
         savedUser.addRole(role);
 
-        userService.saveUser(savedUser);
+        User updatedUser = userService.updateUser(savedUser);
 
         activityLogService.logActivity(
-            savedUser.getId(), 
+            updatedUser.getId(), 
             ActionConstants.REGISTER, 
             ActionConstants.ENTITY_USER, 
-            savedUser.getId(), 
+            updatedUser.getId(), 
             "User registered successfully", 
             "127.0.0.1"
         );
