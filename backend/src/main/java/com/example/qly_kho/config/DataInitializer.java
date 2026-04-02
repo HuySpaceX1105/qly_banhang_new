@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.qly_kho.entity.User;
 import com.example.qly_kho.repository.UserRepository;
+import com.example.qly_kho.service.RoleService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DataInitializer {
 
     private final UserRepository userRepository;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
     @Bean
@@ -30,6 +32,9 @@ public class DataInitializer {
                         "System Admin"
                 );
 
+                user.addRole(roleService.findById(1l));
+                user.addRole(roleService.findById(2l));
+                
                 userRepository.save(user);
             }
 
