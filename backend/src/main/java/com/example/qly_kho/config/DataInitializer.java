@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.qly_kho.entity.User;
 import com.example.qly_kho.repository.UserRepository;
-import com.example.qly_kho.service.RoleService;
+import com.example.qly_kho.service.domain.RoleService;
 
 import lombok.RequiredArgsConstructor;
 

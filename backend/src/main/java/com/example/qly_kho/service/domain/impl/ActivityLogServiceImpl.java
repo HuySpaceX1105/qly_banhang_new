@@ -1,4 +1,4 @@
-package com.example.qly_kho.service.impl;
+package com.example.qly_kho.service.domain.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,8 +8,8 @@ import com.example.qly_kho.entity.User;
 import com.example.qly_kho.exception.ErrorCode;
 import com.example.qly_kho.exception.custom.AppException;
 import com.example.qly_kho.repository.ActivityLogRepository;
-import com.example.qly_kho.service.ActivityLogService;
-import com.example.qly_kho.service.UserService;
+import com.example.qly_kho.service.domain.ActivityLogService;
+import com.example.qly_kho.service.domain.UserService;
 
 import lombok.RequiredArgsConstructor;
 

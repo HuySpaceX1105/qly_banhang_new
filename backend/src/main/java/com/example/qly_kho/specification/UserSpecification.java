@@ -14,7 +14,7 @@ public class UserSpecification {
         };
     }
 
-    public Specification<User> hasEmail(String email) {
+    public static Specification<User> hasEmail(String email) {
         return (root, query, cb) -> {
             if (email == null || email.isBlank()) return null;
 
@@ -22,7 +22,7 @@ public class UserSpecification {
         };
     }
 
-    public Specification<User> hasFullName(String fullName) {
+    public static Specification<User> hasFullName(String fullName) {
         return (root, query, cb) -> {
             if (fullName == null || fullName.isBlank()) return null;
 

@@ -1,17 +1,21 @@
-package com.example.qly_kho.service.impl;
+package com.example.qly_kho.service.domain.impl;
 
 import java.util.Set;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.qly_kho.entity.User;
 import com.example.qly_kho.exception.custom.DuplicateException;
 import com.example.qly_kho.exception.custom.NotFoundException;
 import com.example.qly_kho.repository.UserRepository;
-import com.example.qly_kho.service.UserService;
+import com.example.qly_kho.service.domain.UserService;
+import com.example.qly_kho.specification.UserSpecification;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,6 +33,17 @@ public class UserServiceImpl implements UserService {
                 String.format("User with username: %s not found in UserService", username)
             ));
     }
+
+
+    @Override
+    public User findByUsernameAndDeletedAtIsNull(String username) {
+
+        return userRepository.findByUsernameAndDeletedAtIsNull(username)
+            .orElseThrow(() -> new NotFoundException(
+                String.format("User with username: %s not found in UserService", username)
+            ));
+    }
+
 
     @Override
     public User findById(Long id) {
@@ -72,5 +87,15 @@ public class UserServiceImpl implements UserService {
     public void incrementPermissionVersionByUserIds(Set<Long> userIds) {
         userRepository.incrementPermissionVersionByUserIds(userIds);
     }
-    
+
+    @Override
+    public Page<User> searchUser(String keyword, Pageable pageable) {
+
+        Specification<User> specification = Specification
+                                                .where(UserSpecification.hasUsername(keyword))
+                                                .or(UserSpecification.hasEmail(keyword))
+                                                .or(UserSpecification.hasFullName(keyword));
+
+        return userRepository.findAll(specification, pageable);
+    }
 }

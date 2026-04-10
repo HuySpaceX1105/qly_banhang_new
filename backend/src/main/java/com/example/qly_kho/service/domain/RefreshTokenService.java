@@ -1,4 +1,4 @@
-package com.example.qly_kho.service;
+package com.example.qly_kho.service.domain;
 
 
 public interface RefreshTokenService {

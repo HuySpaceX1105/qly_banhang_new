@@ -1,13 +1,13 @@
-package com.example.qly_kho.service.impl;
+package com.example.qly_kho.service.domain.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.qly_kho.entity.Permission;
 import com.example.qly_kho.exception.custom.NotFoundException;
 import com.example.qly_kho.repository.PermissionRepository;
-import com.example.qly_kho.service.PermissionService;
+import com.example.qly_kho.service.domain.PermissionService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service

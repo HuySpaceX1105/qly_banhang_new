@@ -1,7 +1,9 @@
-package com.example.qly_kho.service.impl;
+package com.example.qly_kho.service.application.impl;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,18 +12,19 @@ import com.example.qly_kho.constant.ActionConstants;
 import com.example.qly_kho.constant.AppConstants;
 import com.example.qly_kho.dto.request.auth.LoginRequest;
 import com.example.qly_kho.dto.request.auth.RegisterRequest;
-import com.example.qly_kho.dto.response.AuthResponse;
+import com.example.qly_kho.dto.response.auth.AuthResponse;
 import com.example.qly_kho.entity.Role;
 import com.example.qly_kho.entity.User;
 import com.example.qly_kho.exception.custom.UnauthorizedException;
 import com.example.qly_kho.mapper.AuthMapper;
 import com.example.qly_kho.security.jwt.JwtProvider;
 import com.example.qly_kho.security.jwt.payload.RefreshTokenPayLoad;
-import com.example.qly_kho.service.ActivityLogService;
-import com.example.qly_kho.service.AuthService;
-import com.example.qly_kho.service.RefreshTokenService;
-import com.example.qly_kho.service.RoleService;
-import com.example.qly_kho.service.UserService;
+import com.example.qly_kho.security.userdetails.CustomUserDetails;
+import com.example.qly_kho.service.application.AuthService;
+import com.example.qly_kho.service.domain.ActivityLogService;
+import com.example.qly_kho.service.domain.RefreshTokenService;
+import com.example.qly_kho.service.domain.RoleService;
+import com.example.qly_kho.service.domain.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,39 +46,39 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public AuthResponse login(LoginRequest request) {
         try {
-            authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.username(), request.password())
             );
-        } catch (Exception e) {
+
+            CustomUserDetails userDetail = (CustomUserDetails) authentication.getPrincipal();
+            User user = userDetail.getUser();
+
+            String accessToken = jwtProvider.generateAccessTokenFromUsername(user.getUsername(), user.getAuthVersion(), user.getPermissionVersion());
+            String refreshToken = jwtProvider.generateRefreshToken(user.getUsername(), user.getAuthVersion());    
+
+            activityLogService.logActivity(
+                user.getId(), 
+                ActionConstants.LOGIN, 
+                ActionConstants.ENTITY_USER, 
+                user.getId(), 
+                "User logged in successfully", 
+                "127.0.0.1"
+            );
+            
+            //vô hiệu tất cả các refresh token của user
+            refreshTokenService.revokeRefreshTokenFromUserId(user.getId());
+            //thêm refresh token khi user đăng nhập vào db
+            refreshTokenService.addRefreshTokenFromUsername(
+                refreshToken,
+                request.username()
+            );
+            
+            return authMapper.toAuthResponse(accessToken, refreshToken, AppConstants.JWT_PREFIX, user);
+        } catch (AuthenticationException e) {
             throw new UnauthorizedException(
                 String.format("Invalid username or password for user: %s in AuthService", request.username())
             );
         }
-        
-        User user = userService.findByUsername(request.username());
-
-        String accessToken = jwtProvider.generateAccessTokenFromUsername(user.getUsername(), user.getAuthVersion(), user.getPermissionVersion());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getUsername(), user.getAuthVersion());    
-
-        activityLogService.logActivity(
-            user.getId(), 
-            ActionConstants.LOGIN, 
-            ActionConstants.ENTITY_USER, 
-            user.getId(), 
-            "User logged in successfully", 
-            "127.0.0.1"
-        );
-        
-        //vô hiệu tất cả các refresh token của user
-        refreshTokenService.revokeRefreshTokenFromUserId(user.getId());
-        //thêm refresh token khi user đăng nhập vào db
-        refreshTokenService.addRefreshTokenFromUsername(
-            refreshToken,
-            request.username()
-        );
-        
-        return authMapper.toAuthResponse(accessToken, refreshToken, AppConstants.JWT_PREFIX, user);
-    
     }
 
     @Override

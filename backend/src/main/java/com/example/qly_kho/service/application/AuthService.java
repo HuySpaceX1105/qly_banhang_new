@@ -1,8 +1,8 @@
-package com.example.qly_kho.service;
+package com.example.qly_kho.service.application;
 
 import com.example.qly_kho.dto.request.auth.LoginRequest;
 import com.example.qly_kho.dto.request.auth.RegisterRequest;
-import com.example.qly_kho.dto.response.AuthResponse;
+import com.example.qly_kho.dto.response.auth.AuthResponse;
 
 public interface AuthService {
     

@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { getUserListService } from "../../services/userService";
+
 import HomeLayout from "../../layouts/HomeLayout";
 import Header from "../../components/listdata/Header";
 import FormCardList from "../../components/listdata/FormCardList";
@@ -7,52 +10,31 @@ import Pagination from "../../components/listdata/Pagination";
 import UserRow from "../../components/listdata/table/row/UserRow";
 
 export default function ListUserPage() {
-    const names = ["Tên đăng nhập", "Email", "Họ tên", "Trạng thái", "Ngày tạo", "Ngày cập nhật"];
+    const names = ["Tên đăng nhập", "Email", "Họ tên", "Vai trò", "Trạng thái", "Khóa", "Ngày tạo", "Ngày cập nhật", "Ngày xóa"];
 
-    // Mock dữ liệu users
-    const users = [
-        {
-            username: "admin",
-            email: "admin@example.com",
-            full_name: "Nguyễn Văn Admin",
-            enabled: true,
-            created_at: "2026-03-01 09:00",
-            updated_at: "2026-03-05 10:00"
-        },
-        {
-            username: "user1",
-            email: "user1@example.com",
-            full_name: "Trần Thị B",
-            enabled: true,
-            created_at: "2026-03-02 11:30",
-            updated_at: null
-        },
-        {
-            username: "user2",
-            email: "user2@example.com",
-            full_name: "Lê Văn C",
-            enabled: false,
-            created_at: "2026-03-03 14:15",
-            updated_at: "2026-03-07 16:00"
-        },
-        {
-            username: "user3",
-            email: "user3@example.com",
-            full_name: null,
-            enabled: true,
-            created_at: "2026-03-04 08:45",
-            updated_at: null
-        },
-        {
-            username: "user4",
-            email: "user4@example.com",
-            full_name: "Phạm Thị D",
-            enabled: false,
-            created_at: "2026-03-05 11:00",
-            updated_at: "2026-03-10 09:30"
-        }
-    ];
+    const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(10);
+    const [total, setTotal] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
 
+    const fetchUsers = async (page, size, keyword = "") => {
+        getUserListService(page, size, keyword).then(res => {
+            console.log(res.content);
+            setUsers(res.content);
+            setPage(res.page);
+            setSize(res.size);
+            setTotal(res.total);
+            setTotalPage(res.totalPages);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
+
+    useEffect(() => {
+        fetchUsers(page, size);
+    }, []);
     return (
         <HomeLayout>
             <FormCardList>
@@ -73,7 +55,7 @@ export default function ListUserPage() {
                     </div>
                 </div>
 
-                <Pagination />
+                <Pagination page={page} size={size} total={total} totalPages={totalPage} onPageChange={(newPage) => fetchUsers(newPage, size)} />
             </FormCardList>
         </HomeLayout>
     );

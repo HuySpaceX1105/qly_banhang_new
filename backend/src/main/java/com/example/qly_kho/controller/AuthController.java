@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.qly_kho.dto.request.auth.LoginRequest;
 import com.example.qly_kho.dto.request.auth.RegisterRequest;
-import com.example.qly_kho.dto.response.AuthResponse;
-import com.example.qly_kho.service.AuthService;
+import com.example.qly_kho.dto.response.auth.AuthResponse;
+import com.example.qly_kho.service.application.AuthService;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,15 +1,15 @@
-package com.example.qly_kho.service.impl;
+package com.example.qly_kho.service.domain.impl;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.qly_kho.entity.Role;
 import com.example.qly_kho.exception.custom.DuplicateException;
 import com.example.qly_kho.exception.custom.NotFoundException;
 import com.example.qly_kho.repository.RoleRepository;
-import com.example.qly_kho.service.RoleService;
+import com.example.qly_kho.service.domain.RoleService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service

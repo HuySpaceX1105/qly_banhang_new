@@ -1,4 +1,4 @@
-package com.example.qly_kho.dto.response;
+package com.example.qly_kho.dto.response.auth;
 
 import java.util.Set;
 

@@ -1,20 +1,20 @@
-package com.example.qly_kho.service.impl;
+package com.example.qly_kho.service.domain.impl;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.qly_kho.constant.ActionConstants;
 import com.example.qly_kho.dto.request.category.CreateCategoryRequest;
-import com.example.qly_kho.dto.response.CategoryResponse;
+import com.example.qly_kho.dto.response.category.CategoryResponse;
 import com.example.qly_kho.entity.Category;
 import com.example.qly_kho.exception.custom.DuplicateException;
 import com.example.qly_kho.repository.CategoryRepository;
 import com.example.qly_kho.security.cache.UserCache;
-import com.example.qly_kho.service.ActivityLogService;
-import com.example.qly_kho.service.CategoryService;
+import com.example.qly_kho.service.domain.ActivityLogService;
+import com.example.qly_kho.service.domain.CategoryService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service

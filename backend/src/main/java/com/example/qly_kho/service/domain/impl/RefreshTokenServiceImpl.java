@@ -1,4 +1,4 @@
-package com.example.qly_kho.service.impl;
+package com.example.qly_kho.service.domain.impl;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.qly_kho.entity.RefreshToken;
 import com.example.qly_kho.entity.User;
@@ -14,11 +15,10 @@ import com.example.qly_kho.exception.custom.AppException;
 import com.example.qly_kho.exception.custom.UnauthorizedException;
 import com.example.qly_kho.repository.RefreshTokenRepository;
 import com.example.qly_kho.security.jwt.JwtProvider;
-import com.example.qly_kho.service.RefreshTokenService;
-import com.example.qly_kho.service.UserService;
+import com.example.qly_kho.service.domain.RefreshTokenService;
+import com.example.qly_kho.service.domain.UserService;
 import com.example.qly_kho.util.SHA256Hasher;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service

@@ -3,7 +3,7 @@ package com.example.qly_kho.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.example.qly_kho.dto.response.AuthResponse;
+import com.example.qly_kho.dto.response.auth.AuthResponse;
 import com.example.qly_kho.entity.User;
 
 @Mapper(componentModel = "spring", uses = UserMapper.class)

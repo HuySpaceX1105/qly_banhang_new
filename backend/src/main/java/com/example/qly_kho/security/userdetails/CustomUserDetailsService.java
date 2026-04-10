@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.example.qly_kho.entity.User;
-import com.example.qly_kho.service.UserService;
+import com.example.qly_kho.service.domain.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        User user = userService.findByUsername(username);
+        User user = userService.findByUsernameAndDeletedAtIsNull(username);
         return new CustomUserDetails(user);         
     }
 

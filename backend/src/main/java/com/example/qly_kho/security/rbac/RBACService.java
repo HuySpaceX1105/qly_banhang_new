@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import com.example.qly_kho.entity.Permission;
 import com.example.qly_kho.entity.Role;
 import com.example.qly_kho.entity.User;
-import com.example.qly_kho.service.PermissionService;
-import com.example.qly_kho.service.RoleService;
-import com.example.qly_kho.service.UserService;
+import com.example.qly_kho.service.domain.PermissionService;
+import com.example.qly_kho.service.domain.RoleService;
+import com.example.qly_kho.service.domain.UserService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

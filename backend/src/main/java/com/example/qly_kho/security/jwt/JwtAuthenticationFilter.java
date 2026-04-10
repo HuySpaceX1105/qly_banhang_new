@@ -51,7 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                             throw new UnauthorizedException("Token outdated in JwtAuthenticationFilter");
                         }
                         UserCache userCache = userCacheService.getUserCacheByUsername(username, userVersionCache.authVersion(), userVersionCache.permissionVersion());
-
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userCache,
                             null, 

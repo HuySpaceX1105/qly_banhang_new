@@ -1,4 +1,4 @@
-package com.example.qly_kho.service;
+package com.example.qly_kho.service.domain;
 
 import com.example.qly_kho.entity.Permission;
 

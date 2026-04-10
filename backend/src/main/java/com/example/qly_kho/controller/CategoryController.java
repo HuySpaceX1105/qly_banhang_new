@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.qly_kho.dto.request.category.CreateCategoryRequest;
-import com.example.qly_kho.service.CategoryService;
+import com.example.qly_kho.service.domain.CategoryService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

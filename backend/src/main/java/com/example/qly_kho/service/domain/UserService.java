@@ -1,6 +1,9 @@
-package com.example.qly_kho.service;
+package com.example.qly_kho.service.domain;
 
 import java.util.Set;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.example.qly_kho.entity.User;
 
@@ -8,6 +11,9 @@ public interface UserService {
 
     //tìm kiếm user theo username
     User findByUsername(String username);
+
+    //tìm kiếm user theo username và kiểm tra tài khoản bị xóa chưa
+    User findByUsernameAndDeletedAtIsNull(String username);
 
     //tìm kiếm user theo id
     User findById(Long id);
@@ -23,4 +29,7 @@ public interface UserService {
 
     //
     void incrementPermissionVersionByUserIds(Set<Long> userIds);
+
+    //tìm kiếm user theo keyword
+    Page<User> searchUser(String keyword, Pageable pageable);
 }
