@@ -1,15 +1,16 @@
-export default function SelectField({ label, options, col = "col-md-12" }) {
+import Select from "react-select";
+
+export default function SelectField({ label, options, value, onChange, col = "col-md-12" }) {
   return (
     <div className={col}>
       <div className="form-group">
         <label>{label}</label>
 
-        <select className="selectpicker form-control" data-style="py-0">
-          {options.map((item, index) => (
-            <option key={index}>{item}</option>
-          ))}
-        </select>
-
+        <Select
+          options={options}
+          value={options.find(o => o.value === value)}
+          onChange={(selected) => onChange(selected.value)}
+        />
       </div>
     </div>
   );

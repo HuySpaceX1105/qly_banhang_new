@@ -182,6 +182,10 @@ public class User {
         this.permissionVersion++;
     }
 
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
     public void disable() {
         this.enabled = false;
     }

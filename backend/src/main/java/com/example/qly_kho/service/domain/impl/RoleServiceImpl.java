@@ -1,5 +1,7 @@
 package com.example.qly_kho.service.domain.impl;
 
+import java.util.List;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +29,20 @@ public class RoleServiceImpl implements RoleService {
                 String.format("Role with (id: %s) not found in RoleService", id)
             ));
     }
-
     
+    
+
+    @Override
+    public List<Role> findByIds(List<Long> ids) {
+        return roleRepository.findAllById(ids);
+    }
+
+
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
 
     @Override
     public Role saveRole(Role role) {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.qly_kho.dto.request.auth.ForgotPasswordRequest;
 import com.example.qly_kho.dto.request.auth.LoginRequest;
 import com.example.qly_kho.dto.request.auth.RegisterRequest;
 import com.example.qly_kho.dto.response.auth.AuthResponse;
@@ -81,6 +82,13 @@ public class AuthController {
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
 
         authService.register(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/recover-password")
+    public ResponseEntity<Void> recoverPassword(@RequestBody @Valid ForgotPasswordRequest request) {
+
+        authService.recoverPassword(request.email());
         return ResponseEntity.ok().build();
     }
 }

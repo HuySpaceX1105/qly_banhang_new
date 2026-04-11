@@ -1,22 +1,35 @@
-export default function TaskBar() {
+export default function TaskBar({active = true, value, onChange}) {
     return (
         <div className="row justify-content-between">
             <div className="col-sm-6 col-md-6">
                 <div id="user_list_datatable_info" className="dataTables_filter">
-                    <form className="mr-3 position-relative">
+                    <form className="mr-3 position-relative" onSubmit={(e) => e.preventDefault()}>
                         <div className="form-group mb-0">
-                            <input type="search" className="form-control" id="exampleInputSearch" placeholder="Search" aria-controls="user-list-table"/>
+                            <input 
+                                type="search" 
+                                className="form-control" 
+                                id="exampleInputSearch" 
+                                placeholder="Search" 
+                                aria-controls="user-list-table"
+                                value={value}
+                                onChange={onChange}
+                            />
                         </div>
                     </form>
                 </div>
             </div>
-            <div className="col-sm-6 col-md-6">
-                <div className="user-list-files d-flex">
-                    <a className="bg-primary" href="javascript:void();">Print</a>
-                    <a className="bg-primary" href="javascript:void();">Excel</a>
-                    <a className="bg-primary" href="javascript:void();">Pdf</a>
-                </div>
-            </div>
+            {
+                active && ( 
+                    <div className="col-sm-6 col-md-6">
+                        <div className="user-list-files d-flex">
+                            <a className="bg-primary" href="javascript:void();">Print</a>
+                            <a className="bg-primary" href="javascript:void();">Excel</a>
+                            <a className="bg-primary" href="javascript:void();">Pdf</a>
+                        </div>
+                    </div>
+                )
+            }
+           
         </div>        
     );
 }

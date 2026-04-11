@@ -2,5 +2,18 @@ server:
     port: 8080
 jwt:
     secret: 8f1e2c3d4b5a69788766554433221100aabbccddeeff11223344556677889900aabbccddeeff
-    accessExpire: 1800000
-    refreshExpire: 604800000
+    accessExpire: 1800000       # 30 phút
+    refreshExpire: 604800000    # 7 ngày
+spring:
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: phucnasa2310@gmail.com
+        password: rrby iemb vsoi bcnl
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+

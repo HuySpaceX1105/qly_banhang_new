@@ -45,6 +45,19 @@ export const registerService = async (data) => {
     }
 }
 
+export const recoverPasswordService = async (email) => {
+    try {
+        await publicAxios.post(
+            "auth/recover-password", 
+            {
+                email
+            }
+        );
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const refreshTokenService = async () => {
     const res = await publicAxios.post(
         "auth/refresh-token",

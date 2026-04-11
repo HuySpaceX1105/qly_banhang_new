@@ -8,7 +8,7 @@ function ConfirmMail() {
   const navigate = useNavigate();
 
   const goToSignIn = () => {
-    navigate("/auth/");
+    navigate("/auth/sign-in");
   };
 
   return (

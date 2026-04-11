@@ -22,9 +22,11 @@ import com.example.qly_kho.security.jwt.payload.RefreshTokenPayLoad;
 import com.example.qly_kho.security.userdetails.CustomUserDetails;
 import com.example.qly_kho.service.application.AuthService;
 import com.example.qly_kho.service.domain.ActivityLogService;
+import com.example.qly_kho.service.domain.EmailService;
 import com.example.qly_kho.service.domain.RefreshTokenService;
 import com.example.qly_kho.service.domain.RoleService;
 import com.example.qly_kho.service.domain.UserService;
+import com.example.qly_kho.util.CodeGenerator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +39,7 @@ public class AuthServiceImpl implements AuthService{
     private final RoleService roleService;
     private final ActivityLogService activityLogService;
     private final RefreshTokenService refreshTokenService;
+    private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -99,6 +102,27 @@ public class AuthServiceImpl implements AuthService{
                 "127.0.0.1"
             );
         }
+    }
+
+    @Override
+    public void recoverPassword(String email) {
+        
+        User user = userService.findByEmail(email);
+        String code = CodeGenerator.generateUserCode();
+
+        user.setPasswordHash(passwordEncoder.encode(code));
+        userService.updateUser(user);
+
+        emailService.sendResetPasswordEmail(email, user.getUsername(), code);
+
+        activityLogService.logActivity(
+            user.getId(), 
+            ActionConstants.RECOVER_PASSWORD, 
+            ActionConstants.ENTITY_USER, 
+            user.getId(), 
+            "User recover password successfully", 
+            "127.0.0.1"
+        );
     }
 
     @Override

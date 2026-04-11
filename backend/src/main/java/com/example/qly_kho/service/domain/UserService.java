@@ -18,6 +18,9 @@ public interface UserService {
     //tìm kiếm user theo id
     User findById(Long id);
 
+    //tìm kiếm user theo email
+    User findByEmail(String email);
+
     //tạo user
     User saveUser(User user);
 

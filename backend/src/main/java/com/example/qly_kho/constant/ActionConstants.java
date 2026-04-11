@@ -10,6 +10,8 @@ public final class ActionConstants {
     public static final String LOGIN = "LOGIN";
     public static final String LOGOUT = "LOGOUT";
     public static final String REGISTER = "REGISTER";
+    public static final String RECOVER_PASSWORD = "RECOVER_PASSWORD";
+    
     public static final String CREATE = "CREATE";
 
 

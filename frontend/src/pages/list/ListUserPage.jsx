@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getUserListService } from "../../services/userService";
 
 import HomeLayout from "../../layouts/HomeLayout";
@@ -17,9 +17,20 @@ export default function ListUserPage() {
     const [size, setSize] = useState(10);
     const [total, setTotal] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
+    const [keyword, setKeyword] = useState("");
+
+    const controllerRef = useRef(null);
 
     const fetchUsers = async (page, size, keyword = "") => {
-        getUserListService(page, size, keyword).then(res => {
+
+        if (controllerRef.current) {
+            controllerRef.current.abort();
+        }
+        const controller = new AbortController();
+        controllerRef.current = controller;
+
+
+        getUserListService(page, size, keyword, controller.signal).then(res => {
             console.log(res.content);
             setUsers(res.content);
             setPage(res.page);
@@ -28,13 +39,15 @@ export default function ListUserPage() {
             setTotalPage(res.totalPages);
         })
         .catch((err) => {
-            console.log(err);
+            if (err.name !== "CanceledError") {
+                console.log(err);
+            }
         });
     }
 
     useEffect(() => {
-        fetchUsers(page, size);
-    }, []);
+        fetchUsers(page, size, keyword);
+    }, [page, size, keyword]);
     return (
         <HomeLayout>
             <FormCardList>
@@ -46,7 +59,11 @@ export default function ListUserPage() {
 
                 <div className="card-body">
                     <div className="table-responsive">
-                        <TaskBar />
+                        <TaskBar 
+                            active={false}
+                            value={keyword}
+                            onChange={(e) => setKeyword(e.target.value)}
+                        />
                         <FormTable names={names}>
                             {users.map((user, index) => (
                                 <UserRow key={index} user={user} />

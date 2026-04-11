@@ -53,6 +53,18 @@ public class UserServiceImpl implements UserService {
             ));
     }
 
+    
+
+    @Override
+    public User findByEmail(String email) {
+
+        return userRepository.findByEmail(email)
+            .orElseThrow(() -> new NotFoundException(
+                String.format("User with email: %s not found in UserService", email)
+            ));
+    }
+
+
     @Override
     public User saveUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -67,7 +79,15 @@ public class UserServiceImpl implements UserService {
             return userRepository.save(user);
 
         } catch (DataIntegrityViolationException ex) {
-            throw new DuplicateException("Duplicate data in UserService: " + ex.getMessage());
+             if (ex.getMessage().contains("uk_users_username")) {
+                throw new DuplicateException("Username already exists in UserService");
+            }
+
+            if (ex.getMessage().contains("uk_users_email")) {
+                throw new DuplicateException("Email already exists in UserService");
+            }
+
+            throw new DuplicateException("Duplicate data");
         }
     }
     

@@ -15,6 +15,9 @@ public interface AuthService {
     //xử lý đăng ký
     void register(RegisterRequest registerRequest);
 
+    //xử lý đổi mật khẩu về email
+    void recoverPassword(String email);
+
     //xử lý xin cấp access token từ refresh token
     AuthResponse refreshToken(String refreshToken);
 
